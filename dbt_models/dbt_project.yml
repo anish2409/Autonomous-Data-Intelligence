@@ -1,0 +1,15 @@
+name: adi_system
+version: '1.0.0'
+config-version: 2
+
+profile: adi_system
+
+model-paths: ["models"]
+seed-paths:  ["seeds"]
+test-paths:  ["tests"]
+
+models:
+  adi_system:
+    +materialized: table
+    staging:
+      +materialized: view

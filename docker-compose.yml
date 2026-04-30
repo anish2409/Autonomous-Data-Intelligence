@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: adi_postgres
+    environment:
+      POSTGRES_DB:       adi_system
+      POSTGRES_USER:     adi_user
+      POSTGRES_PASSWORD: adi_password
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U adi_user -d adi_system"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  adi_pipeline:
+    build: .
+    container_name: adi_pipeline
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST:           postgres
+      PGPORT:           5432
+      PGDATABASE:       adi_system
+      PGUSER:           adi_user
+      PGPASSWORD:       adi_password
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      LOG_LEVEL:        INFO
+      BATCH_SIZE:       1000
+      INGESTION_INTERVAL_SEC: 60
+    command: python main.py --mode daemon
+    volumes:
+      - ./outputs:/app/outputs
+
+  adi_seed:
+    build: .
+    container_name: adi_seed
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST:     postgres
+      PGUSER:     adi_user
+      PGPASSWORD: adi_password
+      PGDATABASE: adi_system
+    command: python main.py --mode seed
+    profiles: ["seed"]
+
+  dashboard:
+    build: .
+    container_name: adi_dashboard
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST:     postgres
+      PGUSER:     adi_user
+      PGPASSWORD: adi_password
+      PGDATABASE: adi_system
+    command: streamlit run dashboard/app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+
+volumes:
+  pg_data:

@@ -1,0 +1,56 @@
+{
+  "pipeline": {
+    "run_id": 42,
+    "rows_ingested": 1000,
+    "status": "SUCCESS",
+    "timestamp": "2026-04-15T07:58:43.725220+00:00"
+  },
+  "anomalies_detected": [
+    {
+      "anomaly_id": 1,
+      "metric_name": "total_revenue",
+      "metric_value": 98450.75,
+      "expected_value": 12200.0,
+      "z_score": 8.94,
+      "severity": "CRITICAL",
+      "region": "North",
+      "category": "Electronics"
+    },
+    {
+      "anomaly_id": 2,
+      "metric_name": "return_rate",
+      "metric_value": 0.43,
+      "expected_value": 0.07,
+      "z_score": 5.12,
+      "severity": "HIGH",
+      "region": "West",
+      "category": "Apparel"
+    }
+  ],
+  "causal_findings": [
+    {
+      "anomaly_id": 1,
+      "cause_variable": "avg_discount",
+      "effect_variable": "total_revenue",
+      "ate": 124.57,
+      "confidence": 0.87,
+      "method": "dowhy_backdoor_lr",
+      "explanation": "avg_discount caused total_revenue anomaly in North/Electronics with ATE=124.5700 and confidence=87.00%. Hypothesis: High discount \u2192 revenue anomaly."
+    }
+  ],
+  "agent_decisions": [
+    {
+      "anomaly_id": 1,
+      "priority": "P1",
+      "final_action": "Freeze further discount promotions in North/Electronics for 4 hours.",
+      "analyst_output": "ANALYST FINDING: The observed KPI deviation indicates a statistically significant anomaly (z-score=8.94, CRITICAL). Revenue spike of 8x normal in Electronics/North, consistent with a flash-sale event or bot-driven bulk order activity.",
+      "causal_output": "CAUSAL FINDING: avg_discount (treatment) causally drives total_revenue (outcome) with ATE=124.57 and confidence=87%. The discount lever triggered a non-linear demand surge, likely amplified by inventory scarcity signals.",
+      "decision_output": "DECISION [P1]: 1) Freeze discount promotions in North/Electronics for 4h. 2) Alert inventory team \u2013 stockout risk within 2h. 3) Activate checkout API rate-limiting (max 10 req/s per customer). 4) Notify fraud team for bot-order review. 5) Schedule post-mortem T+24h. Monitor: cart abandonment rate, API error rate, inventory levels."
+    }
+  ],
+  "self_healing": {
+    "drifts_detected": 0,
+    "drifts_healed": 0,
+    "pipeline_health": "HEALTHY"
+  }
+}
