@@ -3,6 +3,9 @@
 A production-ready Streamlit dashboard powered by a **LangGraph 3-agent pipeline** (Gemini 2.5 Flash) for real-time anomaly detection, causal analysis, and autonomous decision-making on any business dataset.
 
 ---
+🌐 Live Demo
+
+👉 https://autonomous-data-intelligence-jcycmpfdneqse4yabsbihh.streamlit.app/
 
 ## 📁 Project Structure
 
