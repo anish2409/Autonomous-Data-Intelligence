@@ -18,8 +18,7 @@ requests==2.32.3
 streamlit==1.35.0
 plotly==5.22.0
 
-# dbt
-dbt-postgres==1.8.1
+
 
 # Utilities
 python-dotenv==1.0.1
