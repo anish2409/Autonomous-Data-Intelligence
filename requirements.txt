@@ -1,24 +1,8 @@
-# Core
-pandas==2.2.2
+streamlit==1.32.2
+pandas==2.1.4
 numpy==1.26.4
+plotly==5.20.0
+scikit-learn==1.4.2
 sqlalchemy==2.0.30
-
-
-# ML / Anomaly
-scikit-learn==1.5.0
-
-# Causal Inference (optional but recommended)
-# dowhy==0.11.1
-# econml==0.15.1
-
-# HTTP / API
-requests==2.32.3
-
-# Dashboard
-streamlit==1.35.0
-plotly==5.22.0
-
-
-
-# Utilities
+requests==2.31.0
 python-dotenv==1.0.1
